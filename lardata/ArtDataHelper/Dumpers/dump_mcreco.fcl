@@ -1,0 +1,53 @@
+#
+# File:     dump_mcreco.fcl
+# Purpose:  Dump on screen MC track and shower objects.
+# Author:   Gianluca Petrillo (petrillo@slac.stanford.edu)
+# Date:     March 26, 2025
+# Version:  1.0
+#
+# Configuration: by default, "mcreco" data products are dumped.
+#
+# Service dependencies:
+# - message facility
+#
+
+process_name: DumpMCReco
+
+services.message.destinations: {
+  
+  # route all "DumpMCTracksAndShowers" messages into DumpMCTracksAndShowers.log
+  DumpMCRecoLog: {
+    append: false
+    categories: {
+      DumpMCTracksAndShowers: { limit: -1 }
+      default:                { limit: 0 }
+    }
+    filename: "DumpMCTracksAndShowers.log"
+    threshold: "INFO"
+    type: "file"
+  } # DumpMCRecoLog
+  
+  LogStandardOut: {
+    categories: {
+      DumpMCTracksAndShowers: { limit: 0 }
+      default:                {}
+    }
+    threshold: "WARNING"
+    type: "cout"
+  } # LogStandardOut
+  
+} # services.message.destinations
+
+
+physics.analyzers.dumpmcreco: {
+
+  module_type:  DumpMCTracksAndShowers
+  
+  MCRecoTag: "mcreco"
+  
+  # output category, used for filtering (see above)
+  OutputCategory: "DumpMCTracksAndShowers"
+  
+}
+
+physics.dumpers:  [ dumpmcreco ]

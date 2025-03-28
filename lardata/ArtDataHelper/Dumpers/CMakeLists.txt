@@ -23,7 +23,9 @@ set(SimulationDumpers
   "DumpSimEnergyDeposits"
   "DumpParticleIDs"
   )
-set(MCDumper)
+set(MCDumpers
+  "DumpMCTracksAndShowers"
+  )
 
 
 cet_make_library(SOURCE
@@ -68,6 +70,7 @@ foreach(Dumper IN LISTS SimulationDumpers)
     messagefacility::MF_MessageLogger
     ROOT::GenVector
     ROOT::Core
+    range-v3::range-v3
   )
 endforeach(Dumper IN LISTS SimulationDumpers)
 
@@ -76,6 +79,8 @@ foreach(Dumper IN LISTS MCDumpers)
   cet_build_plugin(${Dumper} art::module
     LIBRARIES REG
     lardataobj::MCBase
+    lardataalg::MCDumpers
+    range-v3::range-v3
 )
 endforeach()
 
